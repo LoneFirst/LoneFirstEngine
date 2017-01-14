@@ -3,3 +3,4 @@ assets
 dist
 test
 materials.json
+webpack.config.js

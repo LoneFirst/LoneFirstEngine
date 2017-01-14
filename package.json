@@ -1,0 +1,32 @@
+{
+  "name": "lfe",
+  "version": "1.0.0",
+  "description": "A canvas engine",
+  "main": "script.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cnwangjie/LoneFirstEngine.git"
+  },
+  "author": "cnwangjie",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/cnwangjie/LoneFirstEngine/issues"
+  },
+  "homepage": "https://github.com/cnwangjie/LoneFirstEngine#readme",
+  "keywords": [
+    "canvas"
+  ],
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-browserify": "^0.5.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-inject": "^4.2.0"
+  }
+}
