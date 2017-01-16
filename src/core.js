@@ -227,8 +227,9 @@ function canvas () {
         this.onmouseout()
 
 
-        this.obj.rect.middle.moveTo(this.mouse, 10)
-
+        if ('tick' in this) {
+            this.tick()
+        }
 
     }
 

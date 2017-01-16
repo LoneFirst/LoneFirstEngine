@@ -28,12 +28,12 @@ ca.addObj(
         key: 'rect',
         color: '#f00',
         onmouseover: o,
-        onmouseout: t,
-        press: function () {
-            // this.co.x = ca.mouse.x - this.pressx
-            // this.co.y = ca.mouse.y - this.pressy
-            this.co.moveTo({x: ca.mouse.x - this.pressx, y: ca.mouse.y - this.pressy}, 20)
-        }
+        onmouseout: t
+        // ,press: function () {
+        //     // this.co.x = ca.mouse.x - this.pressx
+        //     // this.co.y = ca.mouse.y - this.pressy
+        //     this.co.moveTo({x: ca.mouse.x - this.pressx, y: ca.mouse.y - this.pressy}, 20)
+        // }
     })
 )
 for (let i = 1; i < 14; i++) {
@@ -53,3 +53,14 @@ for (let i = 1; i < 14; i++) {
 
     }))
 }
+ca.tick = () => {
+  // ca.obj.rect.middle.moveTo(ca.mouse, 10)
+
+}
+// ca.obj.rect.co.bindList.push(ca.obj.poker1.co)
+ca.obj.poker1.co.bind(ca.obj.rect.middle)
+ca.obj.rect.co.on('change', () => {
+    console.log('!')
+})
+// ca.obj.rect.co.bind(ca.obj.poker1.co)
+// ca.obj.rect.co.bind(ca.obj.rect.middle)

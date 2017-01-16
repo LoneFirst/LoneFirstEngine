@@ -5,21 +5,21 @@ var inject = require('gulp-inject')
 var browserify = require('gulp-browserify')
 
 gulp.task('scripts', function() {
-    gulp.src(['./src/*.js', './script.js'])
+    gulp.src(['./src/*.js'])
         .pipe(babel({
             presets: ['es2015']
         }))
         .pipe(concat('lfe.js'))
-        .pipe(browserify({
-            insertGlobals: true
-            ,debug: !gulp.env.production
-        }))
+        // .pipe(browserify({
+        //     insertGlobals: true
+        //     ,debug: !gulp.env.production
+        // }))
         .pipe(gulp.dest('./test'))
 })
 
 gulp.task('index', ['scripts'], function() {
     gulp.src('./index.html')
-        .pipe(inject(gulp.src('./test/lfe.js', {read:false}), {relative: true}))
+        .pipe(inject(gulp.src(['./test/lfe.js', './script.js'], {read:false}), {relative: true}))
         .pipe(gulp.dest('./'))
 })
 

@@ -4,3 +4,4 @@ dist
 test
 materials.json
 webpack.config.js
+test.html
