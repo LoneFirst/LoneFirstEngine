@@ -13,6 +13,9 @@ function obj (imagedata, x, y, width, height, option = null) {
     this.draw = (ca) => {
         ca.ctx.putImageData(this.imagedata, this.co.x, this.co.y)
     }
+    this.top = () => {
+        this.ca.topObj(this.key)
+    }
     if (option) {
         for (let key in option) {
             this[key] = option[key]

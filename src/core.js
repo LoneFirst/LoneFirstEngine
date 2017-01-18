@@ -5,7 +5,8 @@ function canvas () {
     this.obj = {
     }
 
-    this.order = []
+    // 储存画布内对象绘制顺序
+    this.layer = []
 
     this.material = {
         "bg": {
@@ -24,7 +25,7 @@ function canvas () {
 
     this.loadAllObjs = () => {
         for (let key in this.obj) {
-            this.order.push(key)
+            this.layer.push(key)
         }
     }
 
@@ -166,8 +167,8 @@ function canvas () {
             ca.cvs.width = ca.cvs.width
 
             // 每次刷新按照包含的对象的类型分别绘制出各个对象
-            for (let i = 0; i < this.order.length; i++) {
-                let key = this.order[i]
+            for (let i = 0; i < this.layer.length; i++) {
+                let key = this.layer[i]
                 let tmp = this.obj[key]
                 tmp.draw(this)
             }
@@ -185,11 +186,13 @@ function canvas () {
         })
     }
 
-    this.registerObj = (key, layer = null) => {
-        if (layer != null && 'length' in this.order[layer]) {
-            this.order[layer].push(key)
+    this.registerObj = (key, lv = null) => {
+        this.obj[key].ca = this
+        this.obj[key].bepress = false
+        if (lv != null && 'length' in this.layer[lv]) {
+            this.layer[lv].push(key)
         } else {
-            this.order.push(key)
+            this.layer.push(key)
         }
     }
 
@@ -198,30 +201,45 @@ function canvas () {
         this.registerObj(obj.key)
     }
 
+    this.topObj = (key) => {
+        for (let i = 0; i < this.layer.length; i++) {
+            if (this.layer[i] == key) {
+                this.layer.splice(i, 1)
+                this.layer.push(key)
+                break
+            }
+        }
+    }
+
     // 数据修改
     this.move = () => {
-        for (let key in this.obj) {
-            if ('width' in this.obj[key]) {
-                if (this.obj[key].mouseon) {
-                    if ('onmousestay' in this.obj[key]) {
-                        this.obj[key].onmousestay()
-                    }
-                } else {
-                    if ('onmousenotstay' in this.obj[key]) {
-                        this.obj[key].onmousenotstay()
-                    }
-                }
-            }
-        }
-        for (let key in this.obj) {
-            if ('width' in this.obj[key]) {
-                if (this.obj[key].bepress) {
-                    if ('press' in this.obj[key]) {
-                        this.obj[key].press()
-                    }
-                }
-            }
-        }
+        // for (let key in this.obj) {
+        //     if ('width' in this.obj[key]) {
+        //         if (this.obj[key].mouseon) {
+        //             if ('onmousestay' in this.obj[key]) {
+        //                 this.obj[key].onmousestay()
+        //             }
+        //         } else {
+        //             if ('onmousenotstay' in this.obj[key]) {
+        //                 this.obj[key].onmousenotstay()
+        //             }
+        //         }
+        //     }
+        // }
+        this.allObj((obj) => {
+            obj.press()
+        }, (obj) => {
+            return 'width' in obj && obj.bepress && 'press' in obj
+        })
+        // for (let key in this.obj) {
+        //     if ('width' in this.obj[key]) {
+        //         if (this.obj[key].bepress) {
+        //             if ('press' in this.obj[key]) {
+        //                 this.obj[key].press()
+        //             }
+        //         }
+        //     }
+        // }
 
         this.onmouseover()
         this.onmouseout()
@@ -233,27 +251,27 @@ function canvas () {
 
     }
 
-    this.allObj = (cb, select = () => {return true}) => {
+    this.allObj = (cb, select = (() => {return true})) => {
         for (let key in this.obj) {
             if (select(this.obj[key])) {
-                this.obj[key] = cb(this.obj[key])
-                if (!select()) {
+                cb(this.obj[key])
+                if (!select(this.obj[key])) {
                     return
                 }
             }
         }
     }
 
-    this.pallObj = (select = (() => {return true}), cb) => {
+    this.pallObj = (cb, select = (() => {return true})) => {
         let lastKey = false
-        for (let key in this.obj) {
-            if (select(this.obj[key])) {
-                lastKey = key
+        for (let i = 0; i < this.layer.length; i++) {
+            if (select(this.obj[this.layer[i]])) {
+                lastKey = this.layer[i]
             }
         }
 
         if (lastKey) {
-            this.obj[lastKey] = cb(this.obj[lastKey])
+            cb(this.obj[lastKey])
         }
     }
 
@@ -301,11 +319,10 @@ function canvas () {
         //         }
         //     }
         // }
-        this.pallObj((obj) => {
-            return (('width' in obj) && obj.mouseon && ('onclick' in obj))
-        }, (obj) => {
+        this.pallObj( (obj) => {
             obj.onclick()
-            return obj
+        }, (obj) => {
+            return 'width' in obj && obj.mouseon && 'onclick' in obj
         })
     }
 
@@ -324,12 +341,11 @@ function canvas () {
             // }
 
             this.pallObj((obj) => {
-                return (('width' in obj) && obj.mouseon && ('press' in obj))
-            }, (obj) => {
                 obj.bepress = true
                 obj.pressx = this.mouse.x - obj.co.x
                 obj.pressy = this.mouse.y - obj.co.y
-                return obj
+            }, (obj) => {
+                return 'width' in obj && obj.mouseon && 'press' in obj
             })
         }
     }
@@ -346,12 +362,9 @@ function canvas () {
             //     }
             // }
 
-            this.pallObj((obj) => {
-                return 'width' in obj && obj.mouseon && ('press' in obj)
-            }, (obj) => {
+            this.allObj((obj) => {
                 obj.bepress = false
-                return obj
-            })
+            }, () => {return true})
         }
     }
 

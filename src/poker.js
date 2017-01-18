@@ -51,14 +51,15 @@ function poker(t, width = 70, height = 90) {
 }
 
 function select() {
+    // this.top()
     if (this.selected) {
         this.co.y += 10
         this.selected = false
-        ca.material.btn.play({volume: 0.1})
+        // ca.material.btn.play({volume: 0.1})
     } else {
         this.co.y -= 10
         this.selected = true
-        ca.material.btn.play({volume: 0.5})
+        // ca.material.btn.play({volume: 0.5})
     }
 }
 // for (let i = 0;i<4;i++) {
