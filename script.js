@@ -19,14 +19,22 @@ function o() {
     // bgm.play()
     // ca.material.btn.play()
 }
+let tmp = document.createElement('canvas')
+tmp.width = 50
+tmp.height = 50
+let ctx = tmp.getContext('2d')
+ctx.font = '20px Arial'
+let back = ctx.createRadialGradient(25, 25, 0, 25, 25, 50)
+back.addColorStop(0, '#aaf')
+back.addColorStop(1, '#33f')
+ctx.fillStyle = back
+ctx.fillRect(0, 0, 50, 50)
+let squre = ctx.getImageData(0, 0, 50, 50)
 ca.addObj(
-    new rect(100, 100, 50, 50, {
-        key: 'rect',
+    new obj(squre, 100, 100, 50, 50, {
         color: '#f00',
-        onmouseover: o,
-        onmouseout: t,
         press: function () {
-            console.log(this.key + 'be pressed')
+            console.log(this.key + ' be pressed')
             this.co.x = ca.mouse.x - this.pressx
             this.co.y = ca.mouse.y - this.pressy
         }
@@ -39,7 +47,6 @@ ca.addObj(
 )
 for (let i = 1; i < 14; i++) {
     ca.addObj(new obj(poker('♥'+i), 170 + i * 30, 100, 70, 90, {
-        key: 'poker' + i,
         onclick: select,
         // onmousestay: function () {
         //     this.co.moveTo(new co(200, 50), 1)
@@ -55,9 +62,9 @@ ca.tick = () => {
 
 }
 // ca.obj.rect.co.bindList.push(ca.obj.poker1.co)
-ca.obj.poker1.co.bind(ca.obj.rect.middle)
-ca.obj.rect.co.on('change', () => {
-    console.log('!')
-})
+// ca.obj.poker1.co.bind(ca.obj.rect.middle)
+// ca.obj.rect.co.on('change', () => {
+//     console.log('!')
+// })
 // ca.obj.rect.co.bind(ca.obj.poker1.co)
 // ca.obj.rect.co.bind(ca.obj.rect.middle)

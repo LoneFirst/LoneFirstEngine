@@ -47,6 +47,13 @@ function co (x = 0, y = 0) {
         }
     }
 
+    this.sub = (x, y) => {
+        let tmp = new co(x, y)
+        this.bind(tmp)
+        tmp.bind(this)
+        return tmp
+    }
+
     // this.set = (x, y) => {
     //     for (let key in this.bindList) {
     //         // this.bindList[key].set(this.bindList[key] + x - this.x, this.bindList[key].y + y - this.y)
