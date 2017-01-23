@@ -1,8 +1,6 @@
+window.lfg = window.lfg || {}
 // 平面坐标
-function co (x = 0, y = 0) {
-    this.cbs = {
-        change: []
-    }
+window.lfg.co = function (x = 0, y = 0) {
     Object.defineProperty(this, 'x', {
         get: () => {
             return this.dx
@@ -28,9 +26,6 @@ function co (x = 0, y = 0) {
         }
     })
     this.y = y
-    this.on = (msg, cb) => {
-        this.cbs[msg].push(cb)
-    }
 
     // 平滑的接近一个点
     this.moveTo = (point, maxV) => {
@@ -48,10 +43,10 @@ function co (x = 0, y = 0) {
     }
 
     this.sub = (x, y) => {
-        let tmp = new co(x, y)
-        this.bind(tmp)
-        tmp.bind(this)
-        return tmp
+        let sub = new lfg.co(x, y)
+        this.bind(sub)
+        sub.bind(this)
+        return this
     }
 
     // this.set = (x, y) => {
@@ -68,17 +63,17 @@ function co (x = 0, y = 0) {
     this.bind = (target) => {
         // let n = this.bindList.length
         // this.bindList[n] = {
-        //     tmpX: target.x
-        //     ,tmpY: target.y
+        //     thisX: target.x
+        //     ,thisY: target.y
         // }
         // let bindInterval = setInterval(() => {
-        //     if (target.x != this.bindList[n].tmpX) {
-        //         this.x += target.x - this.bindList[n].tmpX
-        //         this.bindList[n].tmpX = target.x
+        //     if (target.x != this.bindList[n].thisX) {
+        //         this.x += target.x - this.bindList[n].thisX
+        //         this.bindList[n].thisX = target.x
         //     }
-        //     if (target.y != this.bindList[n].tmpY) {
-        //         this.y += target.y - this.bindList[n].tmpY
-        //         this.bindList[n].tmpY = target.y
+        //     if (target.y != this.bindList[n].thisY) {
+        //         this.y += target.y - this.bindList[n].thisY
+        //         this.bindList[n].thisY = target.y
         //     }
         // }, 20)
         // let bindTarget = {
@@ -91,4 +86,5 @@ function co (x = 0, y = 0) {
         target.bindList.push(this)
         return this
     }
+    return this
 }
